@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <script type="module">
+            //import { ethers } from "./ethers.min.js"
+            import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.min.js"
+            window.ethers = ethers
+        </script>
+        <script>
+            let accounts;
+            async function getAccounts() {
+                provider = new ethers.JsonRpcProvider('http://localhost:8545')
+                try {
+                    accounts = await provider.listAccounts()
+                }
+                 catch (error) {
+                        document.getElementById('accountBalance').innerHTML =  error
+                }
+            }
+            async function accountBalanceByIndex() {
+                ads = document.getElementById('ads').value;
+                try {
+                    balance = await provider.getBalance(ads)
+                    //document.getElementById('accountBalance').innerHTML = ethers.formatEther(balance) + ' ether'
+                    document.getElementById('accountBalance').innerHTML = ethers.formatUnits(balance, "ether") + ' ether'
+                }
+                catch (error) {
+                    document.getElementById('accountBalance').innerHTML =  error;
+                }
+            }
+        </script>
+    </head>
+    <body onload ="getAccounts()">
+        <h1>Node 1</h1>
+        <label>Account Address: </label>
+        <input style="width: 350px;" onmouseover="this.style.backgroundColor='#e0e0e0';" onmouseout="this.style.backgroundColor='';" type="text" id="ads"/>
+        <br>
+        <br>
+        <button type="button" onclick="accountBalanceByIndex()">Account balance</button>
+        <div id="accountBalance" style="margin-top: 20px; font-weight: bold;"></div>
+    </body>
+    
+</html>
